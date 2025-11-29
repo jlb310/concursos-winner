@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sorteos Instagram Pro
 
-## Getting Started
+Una aplicación web moderna y elegante para realizar sorteos de Instagram.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- ✨ **Diseño Premium**: Interfaz oscura con gradientes, glassmorphism y animaciones fluidas.
+- 🚀 **Flujo Completo**: Desde ingresar la URL hasta celebrar al ganador.
+- 🎲 **Selección Justa**: Algoritmo de selección aleatoria (simulado en esta demo).
+- 🏆 **Resultados Claros**: Muestra 1 ganador principal y 3 alternativas.
+- 📱 **Responsive**: Funciona perfectamente en móviles y escritorio.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cómo usar
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+3. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-To learn more about Next.js, take a look at the following resources:
+## Nota sobre la API de Instagram
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Actualmente, la aplicación funciona en **modo demostración**. Debido a las estrictas limitaciones de la API de Instagram, obtener comentarios reales requiere:
+1. Una cuenta de Instagram Business.
+2. Permisos de Facebook Developer aprobados.
+3. Autenticación del usuario (Login con Facebook).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Esta versión simula la obtención de datos para mostrar la experiencia de usuario (UX) y el diseño final. Para conectar datos reales, se necesitaría integrar la *Instagram Graph API* o un servicio de scraping de terceros.
