@@ -5,31 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Search, Gift, Users, Trophy, Sparkles, ArrowRight } from "lucide-react";
 
-// Mock data generator
-const generateMockParticipants = (count: number) => {
-    const users = [
-        "sofia_gomez", "mateo_rodriguez", "valentina_perez", "santiago_lopez",
-        "camila_martinez", "nicolas_gonzalez", "isabella_fernandez", "lucas_torres",
-        "mariana_ramirez", "benjamin_diaz", "victoria_morales", "joaquin_castro",
-        "emilia_herrera", "agustin_jimenez", "catalina_silva", "felipe_rojas",
-        "antonella_vargas", "tomas_munoz", "martina_ortiz", "gabriel_ruiz",
-        "florencia_soto", "daniel_medina", "josefina_navarro", "bruno_guerrero",
-        "renata_cardenas", "vicente_cortes", "maite_araya", "matias_sepulveda",
-        "trinidad_espinoza", "diego_fuentes", "javiera_lara", "sebastian_mora",
-        "constanza_valenzuela", "cristobal_carvajal", "antonia_pizarro", "maximiliano_campos",
-        "francisca_olivares", "julian_tapia", "ignacia_bustos", "alonso_salinas",
-        "amanda_pacheco", "martin_rivera", "fernanda_alvarado", "simon_paredes",
-        "elena_miranda", "pedro_vera", "laura_maldonado", "andres_rios",
-        "paula_toledo", "javier_palma"
-    ];
 
-    return Array.from({ length: count }, (_, i) => ({
-        id: i,
-        username: users[i % users.length] + (Math.floor(i / users.length) > 0 ? `_${i}` : ""),
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`,
-        comment: "Participando! 🔥",
-    }));
-};
 
 export default function GiveawayApp() {
     const [url, setUrl] = useState("");
@@ -39,19 +15,51 @@ export default function GiveawayApp() {
     const [alternatives, setAlternatives] = useState<any[]>([]);
     const [loadingProgress, setLoadingProgress] = useState(0);
 
-    const handleAnalyze = () => {
+    const handleAnalyze = async () => {
         if (!url) return;
         setStatus("loading");
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 10;
-            if (progress >= 100) {
-                clearInterval(interval);
-                setParticipants(generateMockParticipants(Math.floor(Math.random() * 50) + 20)); // 20-70 participants
-                setStatus("ready");
+        setLoadingProgress(0);
+
+        // Pseudo-progress animation while waiting for API
+        const progressInterval = setInterval(() => {
+            setLoadingProgress(prev => {
+                if (prev >= 90) return prev;
+                return prev + Math.random() * 5;
+            });
+        }, 500);
+
+        try {
+            const response = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
+
+            const data = await response.json();
+
+            clearInterval(progressInterval);
+            setLoadingProgress(100);
+
+            if (!response.ok) {
+                alert(data.error || "Error al analizar el post");
+                setStatus("idle");
+                return;
             }
-            setLoadingProgress(Math.min(progress, 100));
-        }, 200);
+
+            if (data.participants && data.participants.length > 0) {
+                setParticipants(data.participants);
+                setStatus("ready");
+            } else {
+                alert("No se encontraron participantes o el post está restringido.");
+                setStatus("idle");
+            }
+
+        } catch (error) {
+            console.error(error);
+            clearInterval(progressInterval);
+            setStatus("idle");
+            alert("Error de conexión con el servidor");
+        }
     };
 
     const pickWinner = () => {
